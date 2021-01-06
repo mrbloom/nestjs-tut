@@ -13,7 +13,7 @@ export class TaskRepository extends Repository<Task> {
   async getTasks(filterDto: GetTaskFilterDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('task');
-    query.where('task.userId1 = :userId', { userId: user.id });
+    query.where('task.userId = :userId', { userId: user.id });
     if (status) {
       query.andWhere('task.status = :status', { status });
     }
@@ -32,7 +32,7 @@ export class TaskRepository extends Repository<Task> {
         `Failed get tasks for ${user.username}, filters DTO ${JSON.stringify(
           filterDto,
         )}`,
-        error.this.stack,
+        error.stack,
       );
       throw new InternalServerErrorException();
     }
